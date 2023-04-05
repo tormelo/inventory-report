@@ -3,7 +3,7 @@ from datetime import datetime
 
 class SimpleReport:
     @staticmethod
-    def get_company_with_most_products(products: list[dict]) -> str:
+    def get_product_quantity_by_company(products: list[dict]) -> str:
         company_products = {}
         for product in products:
             if product["nome_da_empresa"] in company_products:
@@ -11,6 +11,10 @@ class SimpleReport:
             else:
                 company_products[product["nome_da_empresa"]] = 1
 
+        return company_products
+
+    @staticmethod
+    def get_company_with_most_products(company_products: list[dict]) -> str:
         return max(company_products, key=company_products.get)
 
     @staticmethod
@@ -47,11 +51,15 @@ class SimpleReport:
 
     @staticmethod
     def generate(products: list[dict]) -> str:
+        company_products = SimpleReport.get_product_quantity_by_company(
+            products
+        )
+        company_with_most_products = (
+            SimpleReport.get_company_with_most_products(company_products)
+        )
         oldest_fab_date = SimpleReport.get_oldest_fab_date(products)
         closest_exp_date = SimpleReport.get_closest_exp_date(products)
-        company_with_most_products = (
-            SimpleReport.get_company_with_most_products(products)
-        )
+
         return (
             f"Data de fabricação mais antiga: {oldest_fab_date}\n"
             + f"Data de validade mais próxima: {closest_exp_date}\n"
