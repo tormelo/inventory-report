@@ -29,6 +29,13 @@ class Inventory:
         return element_list
 
     @classmethod
+    def get_report(cls, report_type, products: list[dict]) -> str:
+        if report_type == "simples":
+            return SimpleReport.generate(products)
+        if report_type == "completo":
+            return CompleteReport.generate(products)
+
+    @classmethod
     def import_data(cls, path: str, report_type: str) -> str:
         if ".csv" in path:
             products = cls.import_csv(path)
@@ -37,7 +44,4 @@ class Inventory:
         if ".xml" in path:
             products = cls.import_xml(path)
 
-        if report_type == "simples":
-            return SimpleReport.generate(products)
-        if report_type == "completo":
-            return CompleteReport.generate(products)
+        return cls.get_report(report_type, products)
